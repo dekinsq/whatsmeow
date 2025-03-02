@@ -172,6 +172,7 @@ type Client struct {
 	// The library is currently embedded in mautrix-meta (https://github.com/mautrix/meta), but may be separated later.
 	MessengerConfig *MessengerConfig
 	RefreshCAT      func() error
+	proxyAddr       string
 }
 
 type MessengerConfig struct {
@@ -280,7 +281,12 @@ func (cli *Client) SetProxyAddress(addr string, opts ...SetProxyOptions) error {
 	} else {
 		return fmt.Errorf("unsupported proxy scheme %q", parsed.Scheme)
 	}
+	cli.proxyAddr = addr
 	return nil
+}
+
+func (cli *Client) GetProxyAddress() string {
+	return cli.proxyAddr
 }
 
 type Proxy = func(*http.Request) (*url.URL, error)
